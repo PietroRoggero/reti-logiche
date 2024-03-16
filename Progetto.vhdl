@@ -20,19 +20,19 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity project_reti_logiche is
 port (
-                i_clk : in std_logic;
-                i_rst : in std_logic;
+                i_clk   : in std_logic;
+                i_rst   : in std_logic;
                 i_start : in std_logic;
-                i_add : in std_logic_vector(15 downto 0);
-                i_k   : in std_logic_vector(9 downto 0);
+                i_add   : in std_logic_vector(15 downto 0);
+                i_k     : in std_logic_vector(9 downto 0);
 
-                o_done : out std_logic;
+                o_done      : out std_logic;
 
-                o_mem_addr : out std_logic_vector(15 downto 0);
-                i_mem_data : in  std_logic_vector(7 downto 0);
-                o_mem_data : out std_logic_vector(7 downto 0);
-                o_mem_we   : out std_logic;
-                o_mem_en   : out std_logic
+                o_mem_addr  : out std_logic_vector(15 downto 0);
+                i_mem_data  : in  std_logic_vector(7 downto 0);
+                o_mem_data  : out std_logic_vector(7 downto 0);
+                o_mem_we    : out std_logic;
+                o_mem_en    : out std_logic
         );
 end project_reti_logiche;
 
@@ -41,18 +41,18 @@ architecture project_reti_logiche_arch of project_reti_logiche is
                         
     SIGNAL curr_state, next_state: state;
     
-    SIGNAL address,     address_next :      INTEGER RANGE 0 TO 16384        := 0;
-    SIGNAL count,       count_next :        INTEGER RANGE 0 TO 1024         := 0;
-    SIGNAL previous,    previous_next :     INTEGER RANGE 0 TO 255          := 0;
-    SIGNAL credibility, credibility_next :  INTEGER RANGE 0 TO 31           := 0;
-    SIGNAL data,        data_next :         INTEGER RANGE 0 TO 255          := 0;
-    SIGNAL first,       first_next :        BOOLEAN                         := false;
+    SIGNAL address,     address_next        : INTEGER RANGE 0 TO 16384        := 0;
+    SIGNAL count,       count_next          : INTEGER RANGE 0 TO 1024         := 0;
+    SIGNAL previous,    previous_next       : INTEGER RANGE 0 TO 255          := 0;
+    SIGNAL credibility, credibility_next    : INTEGER RANGE 0 TO 31           := 0;
+    SIGNAL data,        data_next           : INTEGER RANGE 0 TO 255          := 0;
+    SIGNAL first,       first_next          : BOOLEAN                         := false;
     
-    SIGNAL o_done_next :                    STD_LOGIC                       := '0';
-    SIGNAL o_mem_addr_next :                STD_LOGIC_VECTOR(15 DOWNTO 0)   := "0000000000000000";
-    SIGNAL o_mem_data_next :                STD_LOGIC_VECTOR(7 DOWNTO 0)    := "00000000" ;
-    SIGNAL o_mem_we_next :                  STD_LOGIC                       := '0';
-    SIGNAL o_mem_en_next :                  STD_LOGIC                       := '0';
+    SIGNAL o_done_next                      : STD_LOGIC                       := '0';
+    SIGNAL o_mem_addr_next                  : STD_LOGIC_VECTOR(15 DOWNTO 0)   := "0000000000000000";
+    SIGNAL o_mem_data_next                  : STD_LOGIC_VECTOR(7 DOWNTO 0)    := "00000000" ;
+    SIGNAL o_mem_we_next                    : STD_LOGIC                       := '0';
+    SIGNAL o_mem_en_next                    : STD_LOGIC                       := '0';
 
     constant trentuno:
         INTEGER RANGE 0 TO 31 := 31;
