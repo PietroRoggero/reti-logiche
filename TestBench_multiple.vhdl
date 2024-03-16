@@ -1,3 +1,4 @@
+
 -- TB EXAMPLE PFRL 2023-2024
 
 library ieee;
@@ -22,7 +23,9 @@ architecture project_tb_arch of project_tb_multiple is
 
     type ram_type is array (65535 downto 0) of std_logic_vector(7 downto 0);
     signal RAM : ram_type := (OTHERS => "00000000");
-
+    
+    signal i: integer := 0;
+    
     -------------- ORIGINALE: 14 PAROLE @ 1234
     constant SCENARIO_LENGTH_1 : integer := 14;
     -------------- TEST 1 EASY 20 PAROLE @ 777
@@ -152,7 +155,9 @@ begin
         -- Wait some time for the component to reset...
         wait for 50 ns;
         
-        tb_rst <= '0';
+       for i in 0 to SCENARIO_LENGTH_4*2-1 loop
+            assert RAM(SCENARIO_ADDRESS_4+i) = std_logic_vector(to_unsigned(scenario_full_4(i),8)) report "TEST FALLITO @ OFFSET=" & integer'image(i) & " expected= " & integer'image(scenario_full_4(i)) & " actual=" & integer'image(to_integer(unsigned(RAM(i)))) severity failure;
+        end loop; tb_rst <= '0';
         memory_control <= '0';  -- Memory controlled by the testbench
         
         wait until falling_edge(tb_clk); -- Skew the testbench transitions with respect to the clock
@@ -203,6 +208,7 @@ begin
         
         memory_control <= '1';  -- Memory controlled by the component
         
+----------------------------------------------Test 1        
         tb_add <= std_logic_vector(to_unsigned(SCENARIO_ADDRESS_1, 16));
         tb_k   <= std_logic_vector(to_unsigned(SCENARIO_LENGTH_1, 10));
         
@@ -216,7 +222,58 @@ begin
         
         tb_start <= '0';
         
-        wait;
+        wait for 100 ns;
+        
+------------------------------------------Test 2
+       
+        tb_add <= std_logic_vector(to_unsigned(SCENARIO_ADDRESS_2, 16));
+        tb_k   <= std_logic_vector(to_unsigned(SCENARIO_LENGTH_2, 10));
+        
+        tb_start <= '1';
+
+        while tb_done /= '1' loop                
+            wait until rising_edge(tb_clk);
+        end loop;
+
+        wait for 5 ns;
+        
+        tb_start <= '0';
+        
+        wait for 100 ns;
+        
+-----------------------------------------------Test 3       
+
+        tb_add <= std_logic_vector(to_unsigned(SCENARIO_ADDRESS_3, 16));
+        tb_k   <= std_logic_vector(to_unsigned(SCENARIO_LENGTH_3, 10));
+        
+        tb_start <= '1';
+
+        while tb_done /= '1' loop                
+            wait until rising_edge(tb_clk);
+        end loop;
+
+        wait for 5 ns;
+        
+        tb_start <= '0';
+        
+        wait for 100 ns;
+        
+ -----------------------------------------------Test 4  
+      
+        tb_add <= std_logic_vector(to_unsigned(SCENARIO_ADDRESS_4, 16));
+        tb_k   <= std_logic_vector(to_unsigned(SCENARIO_LENGTH_4, 10));
+        
+        tb_start <= '1';
+
+        while tb_done /= '1' loop                
+            wait until rising_edge(tb_clk);
+        end loop;
+
+        wait for 5 ns;
+        
+        tb_start <= '0';
+        
+        wait for 100 ns;
         
     end process;
 
@@ -248,7 +305,89 @@ begin
         assert tb_done = '1' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
         wait until falling_edge(tb_done);
 
-        assert false report "Simulation Ended! TEST PASSATO (EXAMPLE)" severity failure;
-    end process;
+        assert false report "Simulation Ended! TEST 1 PASSATO (EXAMPLE)" severity failure;
+ ---------------------------------------------------------------------------------------------------       
+        wait until tb_rst = '1';
+        wait for 25 ns;
+        assert tb_done = '0' report "TEST FALLITO o_done !=0 during reset" severity failure;
+        wait until tb_rst = '0';
 
+        wait until falling_edge(tb_clk);
+        assert tb_done = '0' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
+        
+        wait until rising_edge(tb_start);
+
+        while tb_done /= '1' loop                
+            wait until rising_edge(tb_clk);
+        end loop;
+
+        assert tb_o_mem_en = '0' or tb_o_mem_we = '0' report "TEST FALLITO o_mem_en !=0 memory should not be written after done." severity failure;
+
+        for i in 0 to SCENARIO_LENGTH_2*2-1 loop
+            assert RAM(SCENARIO_ADDRESS_2+i) = std_logic_vector(to_unsigned(scenario_full_2(i),8)) report "TEST FALLITO @ OFFSET=" & integer'image(i) & " expected= " & integer'image(scenario_full_2(i)) & " actual=" & integer'image(to_integer(unsigned(RAM(i)))) severity failure;
+        end loop;
+
+        wait until falling_edge(tb_start);
+        assert tb_done = '1' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
+        wait until falling_edge(tb_done);
+
+        assert false report "Simulation Ended! TEST 2 PASSATO (EXAMPLE)" severity failure;
+ ------------------------------------------------------------------------------------------------------------      
+ 
+        wait until tb_rst = '1';
+        wait for 25 ns;
+        assert tb_done = '0' report "TEST FALLITO o_done !=0 during reset" severity failure;
+        wait until tb_rst = '0';
+
+        wait until falling_edge(tb_clk);
+        assert tb_done = '0' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
+        
+        wait until rising_edge(tb_start);
+
+        while tb_done /= '1' loop                
+            wait until rising_edge(tb_clk);
+        end loop;
+
+        assert tb_o_mem_en = '0' or tb_o_mem_we = '0' report "TEST FALLITO o_mem_en !=0 memory should not be written after done." severity failure;
+
+        for i in 0 to SCENARIO_LENGTH_3*2-1 loop
+            assert RAM(SCENARIO_ADDRESS_3+i) = std_logic_vector(to_unsigned(scenario_full_3(i),8)) report "TEST FALLITO @ OFFSET=" & integer'image(i) & " expected= " & integer'image(scenario_full_3(i)) & " actual=" & integer'image(to_integer(unsigned(RAM(i)))) severity failure;
+        end loop;
+
+        wait until falling_edge(tb_start);
+        assert tb_done = '1' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
+        wait until falling_edge(tb_done);
+
+        assert false report "Simulation Ended! TEST 3 PASSATO (EXAMPLE)" severity failure; 
+        
+ -----------------------------------------------------------------------------------------------------------
+ 
+        wait until tb_rst = '1';
+        wait for 25 ns;
+        assert tb_done = '0' report "TEST FALLITO o_done !=0 during reset" severity failure;
+        wait until tb_rst = '0';
+
+        wait until falling_edge(tb_clk);
+        assert tb_done = '0' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
+        
+        wait until rising_edge(tb_start);
+
+        while tb_done /= '1' loop                
+            wait until rising_edge(tb_clk);
+        end loop;
+
+        assert tb_o_mem_en = '0' or tb_o_mem_we = '0' report "TEST FALLITO o_mem_en !=0 memory should not be written after done." severity failure;
+
+       for i in 0 to SCENARIO_LENGTH_4*2-1 loop
+            assert RAM(SCENARIO_ADDRESS_4+i) = std_logic_vector(to_unsigned(scenario_full_4(i),8)) report "TEST FALLITO @ OFFSET=" & integer'image(i) & " expected= " & integer'image(scenario_full_4(i)) & " actual=" & integer'image(to_integer(unsigned(RAM(i)))) severity failure;
+        end loop;
+
+        wait until falling_edge(tb_start);
+        assert tb_done = '1' report "TEST FALLITO o_done !=0 after reset before start" severity failure;
+        wait until falling_edge(tb_done);
+
+        assert false report "Simulation Ended! TEST 4 PASSATO (EXAMPLE)" severity failure;
+        
+    end process;
+       
 end architecture;
