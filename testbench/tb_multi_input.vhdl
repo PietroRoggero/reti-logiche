@@ -5,10 +5,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use std.textio.all;
 
-entity tb_multi_input is
-end tb_multi_input;
+entity multi_comp_project_tb is
+end multi_comp_project_tb;
 
-architecture tb_multi_input_arch of tb_multi_input is
+architecture multi_comp_project_tb_arch of multi_comp_project_tb is
     constant CLOCK_PERIOD : time := 20 ns;
     signal tb_clk : std_logic := '0';
     signal tb_rst, tb_start, tb_done : std_logic;
