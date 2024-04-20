@@ -204,4 +204,3 @@ begin
         end case;
     end process;
 end architecture project_reti_logiche_arch;
-
