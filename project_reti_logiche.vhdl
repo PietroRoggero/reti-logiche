@@ -1,15 +1,8 @@
  ----------------------------------------------------------------------------------
 -- Company: Politecnico di Milano
 -- Engineer: Lorenzo Tallarico & Pietro Roggero
--- Design Name:
 -- Module Name: project_reti_logiche - project_reti_logiche_arch
 -- Project Name: 10719257_10719258
--- Description:
---
--- Dependencies:
---
--- Additional Comments:
---
 ----------------------------------------------------------------------------------
 
 
@@ -37,7 +30,7 @@ port (
 end project_reti_logiche;
 
 architecture project_reti_logiche_arch of project_reti_logiche is
-    TYPE state IS (INIT, INIT_INPUT, READ, WAIT_READ, WAIT_READ2, CHOICE, WRITE_P, WRITE_C, WAIT_EN, DONE, WAIT_P);
+    TYPE state IS (INIT, INIT_INPUT, READ, WAIT_READ, WAIT_READ2, CHOICE, WRITE_P, WRITE_C, WAIT_EN, DONE);
                         
     SIGNAL curr_state, next_state: state;
     
@@ -149,11 +142,10 @@ begin
                         next_state <= INIT_INPUT;
                         
                     else 
-                        next_state <= WAIT_P;
+                        next_state <= WRITE_P;
                         
                     end if;
                 else
-                    first_next <= false;
                     previous_next <= conv_integer(i_mem_data);
                     credibility_next <= trentuno;
                     next_state <= WAIT_EN;
@@ -161,8 +153,6 @@ begin
                 end if;
                 count_next <= count - 1;
                 
-            when WAIT_P =>
-                next_state <= WRITE_P;
                 
             when WRITE_P =>
                 o_mem_addr_next <= std_logic_vector(to_unsigned(address, 16));
@@ -172,6 +162,7 @@ begin
                 next_state <= WAIT_EN;
             
             when WAIT_EN =>
+                first_next <= false;
                 next_state <= WRITE_C;
                 
             when WRITE_C =>
