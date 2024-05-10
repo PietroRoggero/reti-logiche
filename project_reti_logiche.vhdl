@@ -1,8 +1,15 @@
  ----------------------------------------------------------------------------------
 -- Company: Politecnico di Milano
 -- Engineer: Lorenzo Tallarico & Pietro Roggero
+-- Design Name:
 -- Module Name: project_reti_logiche - project_reti_logiche_arch
 -- Project Name: 10719257_10719258
+-- Description:
+--
+-- Dependencies:
+--
+-- Additional Comments:
+--
 ----------------------------------------------------------------------------------
 
 
@@ -38,7 +45,6 @@ architecture project_reti_logiche_arch of project_reti_logiche is
     SIGNAL count,       count_next          : INTEGER RANGE 0 TO 1024         := 0;
     SIGNAL previous,    previous_next       : INTEGER RANGE 0 TO 255          := 0;
     SIGNAL credibility, credibility_next    : INTEGER RANGE 0 TO 31           := 0;
-    SIGNAL data,        data_next           : INTEGER RANGE 0 TO 255          := 0;
     SIGNAL first,       first_next          : BOOLEAN                         := false;
     
     SIGNAL o_done_next                      : STD_LOGIC                       := '0';
@@ -60,7 +66,6 @@ begin
             credibility <= 0;
             address <= 0;
             count <= 0;
-            data <= 0;
             first <= true;
             curr_state<=INIT;
             report "reset!";
@@ -78,7 +83,6 @@ begin
             credibility <= credibility_next;
             address <= address_next;
             count <= count_next;
-            data <= data_next;
             curr_state <= next_state;
             first <= first_next;
             
@@ -86,7 +90,7 @@ begin
         
     end process;
 
-    process (curr_state, previous, credibility, address, count, i_start, data )
+    process (curr_state, previous, credibility, address, count, i_start)
     begin
 
         o_done_next <= '0';
@@ -99,7 +103,6 @@ begin
         credibility_next <= credibility;
         address_next <= address;
         count_next <= count;
-        data_next <= data;
         first_next <= first;
         next_state <= curr_state;
         
@@ -121,7 +124,6 @@ begin
                     o_mem_addr_next <= std_logic_vector(to_unsigned(address_next, 16));
                     o_mem_we_next <= '0';
                     o_mem_en_next <= '1';
-                    data_next <= conv_integer(i_mem_data);
                     next_state <= WAIT_READ;
                     
                 else
@@ -183,7 +185,6 @@ begin
                     credibility_next <= 0;
                     address_next <= 0;
                     count_next <= 0;
-                    data_next <= 0;
                     first_next <= true;
                     o_done_next <= '0';
                     next_state<=INIT;
