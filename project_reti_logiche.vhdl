@@ -1,15 +1,8 @@
  ----------------------------------------------------------------------------------
--- Company: Politecnico di Milano
+-- School: Politecnico di Milano
 -- Engineer: Lorenzo Tallarico & Pietro Roggero
--- Design Name:
 -- Module Name: project_reti_logiche - project_reti_logiche_arch
 -- Project Name: 10719257_10719258
--- Description:
---
--- Dependencies:
---
--- Additional Comments:
---
 ----------------------------------------------------------------------------------
 
 
